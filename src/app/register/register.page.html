@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+
+</ion-header>
+
+<ion-content [fullscreen]="true">
+      <app-form
+        [fields]="fields"
+        [submitLabel]="'Register'"
+        [cardTitle]="'Registration'"
+        [groupValidators]="groupValidators"
+        (formSubmit)="onFormSubmit($event)">
+        <br />
+        <p style="text-align: center;">Already have an account?</p>
+        <p routerLink="/login" style="text-align: center; cursor: pointer;">Log in</p>
+      </app-form>
+</ion-content>

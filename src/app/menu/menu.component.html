@@ -1,0 +1,42 @@
+<ion-menu side="start" contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>MENU</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item routerLink="/profile-page" (click)="closeMenu()">
+          <ion-label>Profile</ion-label>
+        </ion-item>
+        <ion-menu-toggle>
+          <ion-item routerLink="/my-recipes" (click)="closeMenu()">
+            <ion-label>My recipes</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item routerLink="/create-recipe" (click)="closeMenu()">
+            <ion-label>New recipe</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item routerLink="/all-recipes" (click)="closeMenu()">
+            <ion-label>Discover</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item button id="present-alert" (click)="closeMenu()">
+            <ion-label>Log out</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+ 
+  <ion-alert
+    trigger="present-alert"
+    header="Goodbye"
+    message="Are you sure you want to log out?"
+    [buttons]="alertButtons"
+    (didDismiss)="setResult($event)">
+  </ion-alert>
