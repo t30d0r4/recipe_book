@@ -4,7 +4,7 @@ import { Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { passwordMatchValidator } from '../validators/password.validator';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { AuthService } from '../services/authentication.service';
+import { AuthService } from '../services/auth.services';
 
 @Component({
   selector: 'app-register',
@@ -13,46 +13,68 @@ import { AuthService } from '../services/authentication.service';
   standalone: false,
 })
 export class RegisterPage implements OnInit {
-
   fields: FormField[] = [
-    { name: 'firstName', label: 'First Name', validators: [Validators.required] },
+    {
+      name: 'firstName',
+      label: 'First Name',
+      validators: [Validators.required],
+    },
     { name: 'lastName', label: 'Last Name', validators: [Validators.required] },
     { name: 'username', label: 'Username', validators: [Validators.required] },
-    { name: 'email', label: 'Email', type: 'email', validators: [Validators.required, Validators.email] },
-    { name: 'password', label: 'Password', type: 'password', validators: [Validators.required, Validators.minLength(6)] },
-    { name: 'confirmPassword', label: 'Confirm Password', type: 'password', validators: [Validators.required] }
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      validators: [Validators.required, Validators.email],
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      type: 'password',
+      validators: [Validators.required, Validators.minLength(6)],
+    },
+    {
+      name: 'confirmPassword',
+      label: 'Confirm Password',
+      type: 'password',
+      validators: [Validators.required],
+    },
   ];
 
   groupValidators = [passwordMatchValidator];
 
   async onFormSubmit(values: any) {
     console.log('Register form submitted:', values);
+
+    // Ukloni confirmPassword jer nam ne treba za backend
     const { confirmPassword, ...userData } = values;
 
     const loading = await this.loadingController.create({
-      message: 'Creating account...'
+      message: 'Creating account...',
     });
     await loading.present();
 
-    const result = await this.authService.register(userData);
+    try {
+      await this.authService.register(userData).toPromise();
 
-    await loading.dismiss();
+      await loading.dismiss();
 
-    if (result.success) {
       const alert = await this.alertController.create({
         header: 'Success!',
         message: 'Account created successfully!',
-        buttons: ['OK']
+        buttons: ['OK'],
       });
       await alert.present();
-      
-      // Navigate to all recipes after successful registration
+
+      // Navigacija na listu recepata
       this.router.navigate(['/all-recipes']);
-    } else {
+    } catch (error: any) {
+      await loading.dismiss();
+
       const alert = await this.alertController.create({
         header: 'Registration Failed',
-        message: result.error || 'Something went wrong',
-        buttons: ['OK']
+        message: error?.message || 'Something went wrong',
+        buttons: ['OK'],
       });
       await alert.present();
     }
@@ -63,15 +85,14 @@ export class RegisterPage implements OnInit {
     private authService: AuthService,
     private alertController: AlertController,
     private loadingController: LoadingController
-  ) { }
+  ) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isUserAuthenticated) {
       this.router.navigate(['/all-recipes']);
     }
   }
   goToLogin() {
     this.router.navigate(['/login']);
   }
-
 }

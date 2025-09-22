@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormField, FormComponent } from '../components/form/form.component';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { AuthService } from '../services/authentication.service';
 import { Router } from '@angular/router';
-import { FirebaseService } from '../services/firebase.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { finalize } from 'rxjs/operators';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { AuthService } from '../services/auth.services';
+import { RecipesService } from '../services/recipe.service';
+import { Recipe } from '../models/recipe.model';
 
 interface ImageFile {
   file: File;
@@ -21,7 +19,6 @@ interface ImageFile {
   standalone: false,
 })
 export class CreateRecipePage implements OnInit {
-
   form!: FormGroup;
   selectedDifficulty: number = 1;
   images: ImageFile[] = [];
@@ -29,15 +26,15 @@ export class CreateRecipePage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private firebaseService: FirebaseService,
+    private recipeService: RecipesService,
     private alertController: AlertController,
     private loadingController: LoadingController,
     private formBuilder: FormBuilder,
     private sanitizer: DomSanitizer
-  ) { }
+  ) {}
 
   ngOnInit() {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isUserAuthenticated) {
       this.router.navigate(['/login']);
     }
 
@@ -62,7 +59,7 @@ export class CreateRecipePage implements OnInit {
     this.form.patchValue({ difficulty: event.detail.value });
   }
 
-    onFileChange(event: any) {
+  onFileChange(event: any) {
     const files = event.target.files;
     if (files && files.length > 0) {
       for (const file of files) {
@@ -74,9 +71,8 @@ export class CreateRecipePage implements OnInit {
   }
 
   removeImage(fileToRemove: File) {
-    this.images = this.images.filter(image => image.file !== fileToRemove);
+    this.images = this.images.filter((image) => image.file !== fileToRemove);
   }
-
   async onSubmit() {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
@@ -84,66 +80,48 @@ export class CreateRecipePage implements OnInit {
     }
 
     const loading = await this.loadingController.create({
-      message: 'Creating recipe...'
+      message: 'Creating recipe...',
     });
     await loading.present();
 
     try {
-      const currentUser = this.authService.getCurrentUser();
-      if (!currentUser) {
-        throw new Error('User not logged in');
-      }
-      
-      const imageUrls: string[] = [];
-      if (this.images.length > 0) {
-        const storage = getStorage();
+      const currentUserId = this.authService.getUserId();
+      if (!currentUserId) throw new Error('User not logged in');
 
-        for (const image of this.images) {
-          const filePath = `recipe_images/${currentUser.id}/${new Date().getTime()}_${image.file.name}`;
-          const storageRef = ref(storage, filePath);
-
-          await uploadBytes(storageRef, image.file);
-          const url = await getDownloadURL(storageRef);
-          imageUrls.push(url);
-        }
-      }
       const values = this.form.value;
-      const recipeData = {
-        title: values.title,
-        description: values.description,
-        ingredients: values.ingredients.split('\n').filter((ingredient: string) => ingredient.trim() !== ''),
-        difficulty: Number(values.difficulty),
-        totalTime: Number(values.totalTime),
-        servings: Number(values.servings),
-        createdBy: currentUser.id,
-        author: `${currentUser.firstName} ${currentUser.lastName}`.trim() || currentUser.username,
-        createdAt: new Date(),
-        images: imageUrls // Add image URLs to the recipe data
-      };
 
-      // 3. Add Recipe Data to Firestore
-      await this.firebaseService.addRecipe(recipeData);
+      const newRecipe: Recipe = new Recipe(
+        '',
+        values.title,
+        values.description,
+        currentUserId,
+        Number(values.difficulty),
+        values.ingredients.split('\n').filter((i: string) => i.trim() !== ''),
+        Number(values.totalTime),
+        Number(values.servings)
+      );
 
-      // Dismiss loading and show success alert
+      await this.recipeService.addRecipe(newRecipe).toPromise();
+
       await loading.dismiss();
 
       const alert = await this.alertController.create({
         header: 'Success!',
         message: 'Recipe created successfully!',
-        buttons: ['OK']
+        buttons: ['OK'],
       });
       await alert.present();
 
       this.router.navigate(['/my-recipes']);
       this.form.reset();
-
+      this.images = [];
     } catch (error: any) {
       await loading.dismiss();
 
       const alert = await this.alertController.create({
         header: 'Error',
         message: error.message || 'Failed to create recipe',
-        buttons: ['OK']
+        buttons: ['OK'],
       });
       await alert.present();
     }
