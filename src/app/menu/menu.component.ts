@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { AuthService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-menu',
@@ -11,7 +12,11 @@ import { OverlayEventDetail } from '@ionic/core/components';
 })
 export class MenuComponent  implements OnInit {
 
-  constructor(private menu: MenuController, private router: Router) { }
+  constructor(
+    private menu: MenuController, 
+    private router: Router,
+    private authService: AuthService
+  ) { }
   ngOnInit() {}
 public alertButtons = [
     {
@@ -32,7 +37,8 @@ public alertButtons = [
   }
  
   logout() {
-    this.menu.close();
+    this.closeMenu();
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
  

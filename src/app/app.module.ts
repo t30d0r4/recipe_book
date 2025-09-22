@@ -10,8 +10,12 @@ import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [AppComponent, MenuComponent,],
-  imports: [BrowserModule, IonicModule.forRoot({mode: 'ios'}), AppRoutingModule],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot({ mode: 'ios' }),
+    AppRoutingModule,
+  ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

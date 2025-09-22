@@ -43,6 +43,18 @@
                 </ion-textarea>
               </ion-item>
 
+              <div *ngIf="field.type === 'radio'">
+                <ion-item>
+                  <ion-label>{{ field.label }}</ion-label>
+                </ion-item>
+                <ion-radio-group [formControlName]="field.name">
+                  <ion-item *ngFor="let option of field.options">
+                    <ion-label>{{ option.label }}</ion-label>
+                    <ion-radio slot="start" [value]="option.value"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+                </div>
+
               <ion-text
                 *ngIf="form.get(field.name)?.invalid && form.get(field.name)?.touched"
                 color="danger"

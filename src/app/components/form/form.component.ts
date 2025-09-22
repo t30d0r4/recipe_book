@@ -7,6 +7,7 @@ export interface FormField {
   type?: string;
   placeholder?: string;
   validators?: ValidatorFn[];
+  options?: { value: any, label: string }[];
 }
 @Component({
   selector: 'app-form',
@@ -39,6 +40,10 @@ export class FormComponent  implements OnInit {
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  clearForm() {
+  this.form.reset();
   }
 }
 
