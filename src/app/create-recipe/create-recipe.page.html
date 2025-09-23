@@ -72,7 +72,7 @@
     <ion-item>
       <ion-label>Upload images</ion-label>
       <input type="file" (change)="onFileChange($event)" multiple accept="image/*" #fileInput hidden>
-      <ion-button (click)="fileInput.click()">
+      <ion-button class = "create-recipe-button" (click)="fileInput.click()">
         <ion-icon name="image-outline"></ion-icon>
         <ion-text>Select images</ion-text>
       </ion-button>

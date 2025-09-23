@@ -6,17 +6,37 @@
     <ion-title>Discover recipes</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
-  <ion-list *ngIf="!isLoading">
-    <app-recipe
-      *ngFor="let recipe of recipes"
-      [recipe]="recipe"
-      (deleted)="refreshRecipes()"
-    >
-    </app-recipe>
-  </ion-list>
+
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+
+  <div *ngIf="isLoading$ | async" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Učitavanje recepata...</p>
+  </div>
+
+  <ion-list *ngIf="!(isLoading$ | async) && (recipes$ | async) as recipeList">
+    <div *ngIf="recipeList.length === 0" class="ion-text-center ion-padding">
+      <p>Nema dostupnih recepata.</p>
+      <ion-button class = "create-recipe-button" (click)="refreshRecipes()">Osveži listu</ion-button>
+    </div>
+
+    <ng-container *ngIf="recipeList.length > 0">
+      <app-recipe
+        *ngFor="let recipe of recipeList"
+        [recipe]="recipe"
+        (deleted)="refreshRecipes()"
+      >
+      </app-recipe>
+    </ng-container>
+  </ion-list>
+
+  <div *ngIf="!(isLoading$ | async) && !(recipes$ | async)" class="ion-text-center ion-padding">
+    <p>Error fetching the recipes.</p>
+    <ion-button (click)="refreshRecipes()">Try again</ion-button>
+  </div>
+
 </ion-content>

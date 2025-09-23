@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
 import { RecipesService } from '../services/recipe.service';
 import { RefresherCustomEvent } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-all-recipes',
@@ -10,35 +11,56 @@ import { RefresherCustomEvent } from '@ionic/angular';
   standalone: false,
 })
 export class AllRecipesPage implements OnInit {
-  recipes: Recipe[] = [];
-  isLoading = false;
+  isLoading$: Observable<boolean>;
+  recipes$: Observable<Recipe[]>;
 
-  constructor(private recipesService: RecipesService) {}
+  constructor(private recipesService: RecipesService) {
+    this.isLoading$ = this.recipesService.isLoading$;
+    this.recipes$ = this.recipesService.recipes$;
+  }
 
   ngOnInit() {
-    this.loadRecipes();
+    this.recipesService.getRecipes().subscribe(
+      () => {
+        console.log('Recipes fetched successfully via ngOnInit.');
+      },
+      error => {
+        console.error('Error fetching recipes in ngOnInit: ', error);
+      }
+    );
   }
 
-  loadRecipes() {
-    this.isLoading = true;
-    this.recipesService.getRecipes().subscribe({
-      next: (recipes) => {
-        this.recipes = recipes;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load recipes', err);
-        this.isLoading = false;
-      },
-    });
-  }
+  // loadRecipes() {
+  //   this.isLoading = true;
+  //   this.recipesService.getRecipes().subscribe({
+  //     next: (recipes) => {
+  //       this.recipes = recipes;
+  //       this.isLoading = false;
+  //     },
+  //     error: (err) => {
+  //       console.error('Failed to load recipes', err);
+  //       this.isLoading = false;
+  //     },
+  //   });
+  // }
+
   handleRefresh(event: RefresherCustomEvent) {
-    setTimeout(() => {
-      this.loadRecipes();
-      event.target.complete();
-    }, 2000);
+    this.recipesService.getRecipes().subscribe(
+      () => {
+        console.log('Recipes refreshed successfully!');
+        event.target.complete();
+      },
+      error => {
+        console.error('Error refreshing recipes:', error);
+        event.target.complete();
+      }
+    );
   }
+  
   refreshRecipes() {
-    this.loadRecipes();
+    this.recipesService.getRecipes().subscribe(
+      () => console.log('Recipes reloaded by button.'),
+      error => console.error('Error reloading recipes by button:', error)
+    );
   }
 }

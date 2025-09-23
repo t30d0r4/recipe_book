@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, switchMap, take, tap , Observable, catchError, throwError} from 'rxjs';
+import { BehaviorSubject, map, switchMap, take, tap , Observable, catchError, throwError, finalize} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.services';
 import { Recipe } from '../models/recipe.model';
@@ -21,7 +21,10 @@ interface RecipeData {
 })
 export class RecipesService {
   private _recipes = new BehaviorSubject<Recipe[]>([]);
-
+  recipes$ = this._recipes.asObservable();
+  private _isLoading = new BehaviorSubject<boolean>(false);
+  isLoading$ = this._isLoading.asObservable();
+  
   constructor(
     private http: HttpClient, 
     private authService: AuthService
@@ -53,15 +56,19 @@ export class RecipesService {
       );
   }
 
-  getRecipes(): Observable<any> {
+  getRecipes(): Observable<Recipe[]> {
+    this._isLoading.next(true);
+
     return this.authService.isUserAuthenticated.pipe(
       switchMap(isAuthenticated => {
         if (!isAuthenticated) {
+          this._isLoading.next(false); 
           return throwError(() => new Error('Korisnik nije prijavljen.'));
         }
 
         const token = this.authService.getCurrentUser()?.token;
         if (!token) {
+          this._isLoading.next(false);
           return throwError(() => new Error('Token nije pronađen.'));
         }
         
@@ -93,7 +100,11 @@ export class RecipesService {
       }),
       catchError(error => {
         console.error('Failed to fetch recipes:', error);
+        this._isLoading.next(false); 
         return throwError(() => new Error('Neuspešno učitavanje recepata.'));
+      }),
+      finalize(() => {
+        this._isLoading.next(false);
       })
     );
   }
