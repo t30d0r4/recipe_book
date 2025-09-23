@@ -4,6 +4,7 @@ export class Recipe {
     public title: string = '',
     public description: string = '',
     public author: string = '',
+    public authorUsername: string = '',
     public difficulty: number = 0,
     public ingredients: string[] = [],
     public totalTime: number = 0,

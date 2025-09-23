@@ -6,6 +6,7 @@ import { Recipe } from 'src/app/models/recipe.model';
 import { User } from 'src/app/models/user.model';
 import { RecipesService } from 'src/app/services/recipe.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { RecipeSummary } from 'src/app/models/recipe-summary.model';
 
 @Component({
   selector: 'app-recipe',
@@ -15,7 +16,7 @@ import { ToastService } from 'src/app/services/toast.service';
   standalone: true,
 })
 export class RecipeComponent {
-  @Input() recipe: Recipe = new Recipe();
+  @Input() recipe!: RecipeSummary;
   @Input() users: User[] = [];
   @Input() myRecipes: boolean = false;
   message: string = '';

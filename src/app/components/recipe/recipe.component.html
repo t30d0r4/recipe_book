@@ -11,17 +11,10 @@
 
   <ion-card-content>
     <ion-grid>
-      <!-- Description -->
-      <ion-row>
-        <ion-col class="label-col">Description:</ion-col>
-        <ion-col class="value-col">{{ recipe.description }}</ion-col>
-      </ion-row>
-      <hr />
-
       <!-- Author -->
       <ion-row>
         <ion-col class="label-col">Author:</ion-col>
-        <ion-col class="value-col">{{ recipe.author }}</ion-col>
+        <ion-col class="value-col">{{ recipe.authorUsername }}</ion-col>
       </ion-row>
       <hr />
 
@@ -32,31 +25,12 @@
       </ion-row>
       <hr />
 
-      <!-- Ingredients -->
-      <ion-row>
-        <ion-col class="label-col">Ingredients:</ion-col>
-        <ion-col class="value-col">
-          <ul>
-            <li *ngFor="let ingredient of recipe.ingredients">
-              {{ ingredient }}
-            </li>
-          </ul>
-        </ion-col>
-      </ion-row>
-      <hr />
-
       <!-- Total Time -->
       <ion-row>
         <ion-col class="label-col">Total Time:</ion-col>
         <ion-col class="value-col">{{ recipe.totalTime }} min</ion-col>
       </ion-row>
       <hr />
-
-      <!-- Servings -->
-      <ion-row>
-        <ion-col class="label-col">Servings:</ion-col>
-        <ion-col class="value-col">{{ recipe.servings }}</ion-col>
-      </ion-row>
     </ion-grid>
 
     <!-- Optional Buttons -->

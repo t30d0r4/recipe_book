@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
 import { RecipesService } from '../services/recipe.service';
 import { RefresherCustomEvent } from '@ionic/angular';
+import { RecipeSummary } from '../models/recipe-summary.model';
 
 @Component({
   selector: 'app-my-recipes',
@@ -10,7 +11,7 @@ import { RefresherCustomEvent } from '@ionic/angular';
   standalone: false,
 })
 export class MyRecipesPage implements OnInit {
-  recipes: Recipe[] = [];
+  recipes: RecipeSummary[] = [];
   isLoading = false;
 
   constructor(private recipesService: RecipesService) {}
@@ -22,8 +23,8 @@ export class MyRecipesPage implements OnInit {
   loadRecipes() {
     this.isLoading = true;
     this.recipesService.getMyRecipes().subscribe({
-      next: (recipes) => {
-        this.recipes = recipes;
+      next: (summaries) => {
+        this.recipes = summaries;
         this.isLoading = false;
       },
       error: (err) => {

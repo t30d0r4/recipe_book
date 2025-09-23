@@ -95,6 +95,7 @@ export class CreateRecipePage implements OnInit {
         values.title,
         values.description,
         currentUserId,
+        values.authorUsername,
         Number(values.difficulty),
         values.ingredients.split('\n').filter((i: string) => i.trim() !== ''),
         Number(values.totalTime),
