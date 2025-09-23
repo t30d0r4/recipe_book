@@ -8,16 +8,16 @@
 </ion-header>
 
 <ion-content>
-<ion-list *ngIf="!isLoading">
+  <ion-list *ngIf="!isLoading">
     <app-recipe
       *ngFor="let recipe of recipes"
       [recipe]="recipe"
       (deleted)="refreshRecipes()"
+      [users]="users"
     >
     </app-recipe>
   </ion-list>
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
 </ion-content>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService, UserSummary } from '../services/user.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -7,10 +8,19 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class ProfilePagePage implements OnInit {
+  user: UserSummary = new UserSummary();
 
-  constructor() { }
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
+    this.userService.getMyUser().subscribe({
+      next: (user) => {
+        this.user = user;
+        console.log('User loaded:', this.user);
+      },
+      error: (err) => {
+        console.error('Failed to load user:', err);
+      },
+    });
   }
-
 }

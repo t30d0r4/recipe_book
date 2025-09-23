@@ -90,16 +90,22 @@ export class CreateRecipePage implements OnInit {
 
       const values = this.form.value;
 
+      let imageBase64 = '';
+      if (this.images.length > 0) {
+        const file = this.images[0].file;
+        imageBase64 = await this.convertFileToBase64(file);
+      }
+
       const newRecipe: Recipe = new Recipe(
         '',
         values.title,
         values.description,
         currentUserId,
-        values.authorUsername,
         Number(values.difficulty),
         values.ingredients.split('\n').filter((i: string) => i.trim() !== ''),
         Number(values.totalTime),
-        Number(values.servings)
+        Number(values.servings),
+        imageBase64 // ovde ide Base64 string prve slike
       );
 
       await this.recipeService.addRecipe(newRecipe).toPromise();
@@ -126,5 +132,13 @@ export class CreateRecipePage implements OnInit {
       });
       await alert.present();
     }
+  }
+  convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   }
 }

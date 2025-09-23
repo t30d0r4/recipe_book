@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Recipe</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #recipeForm="ngForm" (ngSubmit)="saveRecipe()">
+    <ion-item>
+      <ion-label position="floating">Title</ion-label>
+      <ion-input name="title" [(ngModel)]="recipe.title" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-textarea
+        name="description"
+        [(ngModel)]="recipe.description"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Difficulty</ion-label>
+      <ion-input
+        type="number"
+        name="difficulty"
+        [(ngModel)]="recipe.difficulty"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Total Time (min)</ion-label>
+      <ion-input
+        type="number"
+        name="totalTime"
+        [(ngModel)]="recipe.totalTime"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Servings</ion-label>
+      <ion-input
+        type="number"
+        name="servings"
+        [(ngModel)]="recipe.servings"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Ingredients (comma separated)</ion-label>
+      <ion-input name="ingredients" [(ngModel)]="ingredientsString"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit">Save</ion-button>
+  </form>
+</ion-content>

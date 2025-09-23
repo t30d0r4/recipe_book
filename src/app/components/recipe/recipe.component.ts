@@ -6,7 +6,7 @@ import { Recipe } from 'src/app/models/recipe.model';
 import { User } from 'src/app/models/user.model';
 import { RecipesService } from 'src/app/services/recipe.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { RecipeSummary } from 'src/app/models/recipe-summary.model';
+import { UserSummary } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-recipe',
@@ -16,8 +16,8 @@ import { RecipeSummary } from 'src/app/models/recipe-summary.model';
   standalone: true,
 })
 export class RecipeComponent {
-  @Input() recipe!: RecipeSummary;
-  @Input() users: User[] = [];
+  @Input() recipe!: Recipe;
+  @Input() users: UserSummary[] = [];
   @Input() myRecipes: boolean = false;
   message: string = '';
   @Output() deleted = new EventEmitter<void>();
@@ -28,7 +28,7 @@ export class RecipeComponent {
     private toastService: ToastService
   ) {}
   onClick() {
-    //this.router.navigateByUrl('/leave-requests/' + this.recipe.id);
+    this.router.navigateByUrl('/edit-recipe/' + this.recipe.id);
   }
   public alertButtons = [
     {
@@ -60,8 +60,8 @@ export class RecipeComponent {
       },
     });
   }
-  getAuthorName(authorId: string): string {
-    const user = this.users.find((u) => u.id === authorId);
-    return user ? user.firstName + ' ' + user.lastName : 'Unknown';
+  get authorName(): string {
+    const author = this.users.find((u) => u.id === this.recipe.author);
+    return author ? author.username : 'Unknown';
   }
 }

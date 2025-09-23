@@ -1,0 +1,28 @@
+<ion-card>
+  <ion-card-content>
+    <ion-grid>
+      <!-- Name -->
+      <ion-row>
+        <ion-col class="label-col">Name:</ion-col>
+        <ion-col class="value-col"
+          >{{ user.firstName }} {{ user.lastName }}</ion-col
+        >
+      </ion-row>
+      <hr />
+
+      <!-- Username -->
+      <ion-row>
+        <ion-col class="label-col">Username:</ion-col>
+        <ion-col class="value-col">{{ user.username }}</ion-col>
+      </ion-row>
+      <hr />
+
+      <!-- Email -->
+      <ion-row>
+        <ion-col class="label-col">Email:</ion-col>
+        <ion-col class="value-col">{{ user.email }}</ion-col>
+      </ion-row>
+      <hr />
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

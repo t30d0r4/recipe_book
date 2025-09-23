@@ -11,10 +11,20 @@
 
   <ion-card-content>
     <ion-grid>
+      <!-- Image -->
+      <ion-row *ngIf="recipe.image">
+        <ion-col>
+          <img
+            [src]="recipe.image"
+            alt="Recipe Image"
+            style="width: 100%; border-radius: 8px; margin-bottom: 10px"
+          />
+        </ion-col>
+      </ion-row>
       <!-- Author -->
-      <ion-row>
+      <ion-row *ngIf="!myRecipes">
         <ion-col class="label-col">Author:</ion-col>
-        <ion-col class="value-col">{{ recipe.authorUsername }}</ion-col>
+        <ion-col class="value-col">{{ authorName }}</ion-col>
       </ion-row>
       <hr />
 

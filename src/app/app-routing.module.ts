@@ -30,7 +30,11 @@ const routes: Routes = [
   {
     path: 'profile-page',
     loadChildren: () => import('./profile-page/profile-page.module').then( m => m.ProfilePagePageModule)
+  },  {
+    path: 'edit-recipe',
+    loadChildren: () => import('./edit-recipe/edit-recipe.module').then( m => m.EditRecipePageModule)
   },
+
 ];
 
 @NgModule({
