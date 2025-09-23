@@ -57,18 +57,14 @@ export class RecipesService {
   }
 
   getRecipes(): Observable<Recipe[]> {
-    this._isLoading.next(true);
-
-    return this.authService.isUserAuthenticated.pipe(
+   return this.authService.isUserAuthenticated.pipe(
       switchMap(isAuthenticated => {
         if (!isAuthenticated) {
-          this._isLoading.next(false); 
           return throwError(() => new Error('Korisnik nije prijavljen.'));
         }
 
         const token = this.authService.getCurrentUser()?.token;
         if (!token) {
-          this._isLoading.next(false);
           return throwError(() => new Error('Token nije pronađen.'));
         }
         

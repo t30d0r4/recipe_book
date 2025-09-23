@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { getAuth, signOut } from 'firebase/auth';
+import { Auth, getAuth, signOut, onIdTokenChanged } from 'firebase/auth';
 import { BehaviorSubject, Observable, throwError, catchError, switchMap, map} from 'rxjs';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
@@ -29,17 +29,52 @@ interface UserData {
 })
 export class AuthService {
   private user = new BehaviorSubject<User | null>(null);
+  private _idToken = new BehaviorSubject<string | null>(null);
+  private firebaseAuth: Auth = getAuth();
 
   constructor(
     private http: HttpClient, 
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {
     this.autoLogin();
+
+    onIdTokenChanged(this.firebaseAuth, firebaseUser => {
+      this.ngZone.run(() => {
+        if (firebaseUser) {
+          firebaseUser.getIdToken().then(idToken => {
+            this._idToken.next(idToken);
+            
+            const currentUser = this.user.getValue();
+            if (currentUser && currentUser.id === firebaseUser.uid) {
+              const expirationTime = new Date(new Date().getTime() + 3600 * 1000);
+              const updatedUser = new User(
+                currentUser.firstName,
+                currentUser.lastName,
+                currentUser.email,
+                currentUser.username,
+                currentUser.id,
+                idToken,
+                expirationTime
+              );
+              this.saveUserData(updatedUser);
+            }
+          }).catch(error => {
+            console.error('Error getting Firebase ID token:', error);
+            this._idToken.next(null);
+          });
+        } else {
+          this._idToken.next(null);
+          this.clearUserData();
+        }
+      });
+    });
+    
   }
 
   get isUserAuthenticated(): Observable<boolean> {
-    return this.user.asObservable().pipe(
-      map(user => !!user)
+    return this._idToken.asObservable().pipe(
+      map(token => !!token)
     );
   }
 
@@ -53,7 +88,6 @@ export class AuthService {
   }
 
   private clearUserData(): void {
-    localStorage.clear();
     localStorage.removeItem('user');
     this.user.next(null);
   }
@@ -66,7 +100,7 @@ export class AuthService {
     const user: User = JSON.parse(userData);
 
     if (user.tokenExpirationDate != null && new Date() > user.tokenExpirationDate) {
-      this.logOut();
+      this.clearUserData();
       return;
     }
     this.user.next(user);
@@ -146,6 +180,7 @@ export class AuthService {
                 expirationTime
               );
               this.saveUserData(user);
+              this._idToken.next(user.token);
               return user;
             })
           );
@@ -167,12 +202,10 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    const user = this.user.getValue();
-    return user ? user.token : null;
+    return this._idToken.getValue();
   }
 
   getUserId(): string | null {
-    const user = this.user.getValue();
-    return user ? user.id : null;
+    return this.user.getValue()?.id || null;
   }
 }
