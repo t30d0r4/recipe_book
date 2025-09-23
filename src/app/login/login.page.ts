@@ -22,7 +22,11 @@ export class LoginPage implements OnInit {
   ) {}
 
   fields: FormField[] = [
-    { name: 'email', label: 'Email', validators: [Validators.required] },
+    { 
+      name: 'email', 
+      label: 'Email', 
+      validators: [Validators.required] 
+    },
     {
       name: 'password',
       label: 'Password',
@@ -64,9 +68,6 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.isUserAuthenticated) {
-      this.router.navigate(['/all-recipes']);
-    }
   }
 
   goToRegister() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormField } from '../components/form/form.component';
-import { Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { Validators, } from '@angular/forms';
 import { Router } from '@angular/router';
 import { passwordMatchValidator } from '../validators/password.validator';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -19,8 +19,16 @@ export class RegisterPage implements OnInit {
       label: 'First Name',
       validators: [Validators.required],
     },
-    { name: 'lastName', label: 'Last Name', validators: [Validators.required] },
-    { name: 'username', label: 'Username', validators: [Validators.required] },
+    { 
+      name: 'lastName', 
+      label: 'Last Name', 
+      validators: [Validators.required] 
+    },
+    { 
+      name: 'username', 
+      label: 'Username', 
+      validators: [Validators.required] 
+    },
     {
       name: 'email',
       label: 'Email',
@@ -46,7 +54,6 @@ export class RegisterPage implements OnInit {
   async onFormSubmit(values: any) {
     console.log('Register form submitted:', values);
 
-    // Ukloni confirmPassword jer nam ne treba za backend
     const { confirmPassword, ...userData } = values;
 
     const loading = await this.loadingController.create({
@@ -66,7 +73,6 @@ export class RegisterPage implements OnInit {
       });
       await alert.present();
 
-      // Navigacija na listu recepata
       this.router.navigate(['/all-recipes']);
     } catch (error: any) {
       await loading.dismiss();
@@ -88,10 +94,8 @@ export class RegisterPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.authService.isUserAuthenticated) {
-      this.router.navigate(['/all-recipes']);
-    }
   }
+  
   goToLogin() {
     this.router.navigate(['/login']);
   }

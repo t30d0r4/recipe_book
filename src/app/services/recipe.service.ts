@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, map, switchMap, take, tap , Observable, catchError, throwError} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.services';
 import { Recipe } from '../models/recipe.model';
@@ -13,6 +13,7 @@ interface RecipeData {
   ingredients: string[];
   totalTime: number;
   servings: number;
+  images: string[];
 }
 
 @Injectable({
@@ -21,7 +22,10 @@ interface RecipeData {
 export class RecipesService {
   private _recipes = new BehaviorSubject<Recipe[]>([]);
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient, 
+    private authService: AuthService
+  ) {}
 
   get recipes() {
     return this._recipes.asObservable();
@@ -49,36 +53,49 @@ export class RecipesService {
       );
   }
 
-  getRecipes() {
-    return this.http
-      .get<{ [key: string]: RecipeData }>(
-        `${
-          environment.firebaseConfig.firebaseRDBUrl
-        }/recipes.json?auth=${this.authService.getToken()}`
-      )
-      .pipe(
-        map((recipesData) => {
-          const recipes: Recipe[] = [];
-          for (const key in recipesData) {
-            if (recipesData.hasOwnProperty(key)) {
-              recipes.push({
-                id: key,
-                title: recipesData[key].title,
-                description: recipesData[key].description,
-                author: recipesData[key].author,
-                difficulty: recipesData[key].difficulty,
-                ingredients: recipesData[key].ingredients,
-                totalTime: recipesData[key].totalTime,
-                servings: recipesData[key].servings,
-              });
-            }
+  getRecipes(): Observable<any> {
+    return this.authService.isUserAuthenticated.pipe(
+      switchMap(isAuthenticated => {
+        if (!isAuthenticated) {
+          return throwError(() => new Error('Korisnik nije prijavljen.'));
+        }
+
+        const token = this.authService.getCurrentUser()?.token;
+        if (!token) {
+          return throwError(() => new Error('Token nije pronađen.'));
+        }
+        
+        return this.http.get<{ [key: string]: RecipeData }>(
+          `${environment.firebaseConfig.firebaseRDBUrl}/recipes.json?auth=${token}`
+        );
+      }),
+      map((recipesData) => {
+        const recipes: Recipe[] = [];
+        for (const key in recipesData) {
+          if (recipesData.hasOwnProperty(key)) {
+            recipes.push({
+              id: key,
+              title: recipesData[key].title,
+              description: recipesData[key].description,
+              author: recipesData[key].author,
+              difficulty: recipesData[key].difficulty,
+              ingredients: recipesData[key].ingredients,
+              totalTime: recipesData[key].totalTime,
+              servings: recipesData[key].servings,
+              images: recipesData[key].images
+            });
           }
-          return recipes;
-        }),
-        tap((recipes) => {
-          this._recipes.next(recipes);
-        })
-      );
+        }
+        return recipes;
+      }),
+      tap((recipes) => {
+        this._recipes.next(recipes);
+      }),
+      catchError(error => {
+        console.error('Failed to fetch recipes:', error);
+        return throwError(() => new Error('Neuspešno učitavanje recepata.'));
+      })
+    );
   }
 
   getRecipe(id: string) {

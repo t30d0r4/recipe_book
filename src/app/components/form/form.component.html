@@ -66,13 +66,14 @@
 
           <br />
 
-          <div class="center-content">
-            <ion-buttons>
-              <ion-button expand="block" type="submit">
+          
+              <ion-button class="create-recipe-button"
+              expand="block" 
+              type="submit" 
+              style="margin-top: 20px;">
                 {{ submitLabel || 'Submit' }}
               </ion-button>
-            </ion-buttons>
-          </div>
+     
           <ng-content></ng-content>
         </form>
       </ion-card-content>
