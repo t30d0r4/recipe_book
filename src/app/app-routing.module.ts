@@ -34,6 +34,10 @@ const routes: Routes = [
     path: 'edit-recipe',
     loadChildren: () => import('./edit-recipe/edit-recipe.module').then( m => m.EditRecipePageModule)
   },
+  {
+    path: 'recipe-details',
+    loadChildren: () => import('./recipe-details/recipe-details.module').then( m => m.RecipeDetailsPageModule)
+  },
 
 ];
 

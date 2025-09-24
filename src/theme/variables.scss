@@ -4,15 +4,22 @@ ion-content {
 
 ion-item {
   --background: #ffffff;
-  --border-radius: 10px;
+  --border-radius: 0px;
   margin-bottom: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   --border-width: 0;
 }
 
+ion-card {
+  --background: #ffffff;
+  --border-radius: 0px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
 ion-label {
   color: #343434 !important;
-  font-weight: 500 !important;
+  font-weight: bold !important;
   font-size: small !important;
 }
 
@@ -27,9 +34,9 @@ ion-input, ion-textarea {
   --background: #000000 !important;
   --border-radius: 0 px !important; 
   --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important; 
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  height: 50px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  height: 30px !important;
 }
 
 //SCALE
@@ -84,7 +91,7 @@ ion-range::part(bar-active) {
   position: relative;
   min-width: 100px;
   height: 100px;
-  border-radius: 10px;
+  border-radius: 0px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

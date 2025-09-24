@@ -1,67 +1,15 @@
-<ion-card>
+<ion-card (click)="openDetails()">
+  <img 
+    alt="Recipe image" 
+    [src]="recipe.image ? recipe.image : 'https://ionicframework.com/docs/img/demos/card-media.png'" 
+  />
   <ion-card-header>
-    <ion-card-title>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="10">{{ recipe.title }}</ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-title>
+    <ion-card-title>{{ recipe.title }}</ion-card-title>
+    <ion-card-subtitle>{{ authorName }}</ion-card-subtitle>
   </ion-card-header>
 
   <ion-card-content>
-    <ion-grid>
-      <!-- Image -->
-      <ion-row *ngIf="recipe.image">
-        <ion-col>
-          <img
-            [src]="recipe.image"
-            alt="Recipe Image"
-            style="width: 100%; border-radius: 8px; margin-bottom: 10px"
-          />
-        </ion-col>
-      </ion-row>
-      <!-- Author -->
-      <ion-row *ngIf="!myRecipes">
-        <ion-col class="label-col">Author:</ion-col>
-        <ion-col class="value-col">{{ authorName }}</ion-col>
-      </ion-row>
-      <hr />
-
-      <!-- Difficulty -->
-      <ion-row>
-        <ion-col class="label-col">Difficulty:</ion-col>
-        <ion-col class="value-col">{{ recipe.difficulty }}</ion-col>
-      </ion-row>
-      <hr />
-
-      <!-- Total Time -->
-      <ion-row>
-        <ion-col class="label-col">Total Time:</ion-col>
-        <ion-col class="value-col">{{ recipe.totalTime }} min</ion-col>
-      </ion-row>
-      <hr />
-    </ion-grid>
-
-    <!-- Optional Buttons -->
-    <ion-buttons
-      *ngIf="myRecipes"
-      style="display: flex; justify-content: center; gap: 150px"
-    >
-      <ion-button color="transparent" [attr.id]="'delete-' + recipe.id">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-
-      <ion-alert
-        [attr.trigger]="'delete-' + recipe.id"
-        class="custom-alert"
-        header="Are you sure you want to delete recipe?"
-        [buttons]="alertButtons"
-      ></ion-alert>
-
-      <ion-button color="transparent" (click)="onClick()">
-        <ion-icon slot="icon-only" name="pencil"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    Total Time: {{ recipe.totalTime }} min<br />
+    Difficulty: {{ recipe.difficulty }}<br />
   </ion-card-content>
 </ion-card>

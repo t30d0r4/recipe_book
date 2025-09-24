@@ -3,6 +3,7 @@ import { Recipe } from '../models/recipe.model';
 import { RecipesService } from '../services/recipe.service';
 import { RefresherCustomEvent } from '@ionic/angular';
 import { UserService, UserSummary } from '../services/user.service';
+import { AuthService } from '../services/auth.services';
 
 @Component({
   selector: 'app-my-recipes',
@@ -38,6 +39,7 @@ export class MyRecipesPage implements OnInit {
       },
     });
   }
+
   loadUsers() {
     this.isLoading = true;
     this.userService.getAllUsers().subscribe({
@@ -51,6 +53,7 @@ export class MyRecipesPage implements OnInit {
       },
     });
   }
+
   handleRefresh(event: RefresherCustomEvent) {
     setTimeout(() => {
       this.loadRecipes();

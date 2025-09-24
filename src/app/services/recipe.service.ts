@@ -112,6 +112,7 @@ export class RecipesService {
 
   getMyRecipes() {
     const currentUserId = this.authService.getUserId();
+    console.log('Current User ID:', currentUserId);
     if (!currentUserId) {
       return this._recipes.asObservable().pipe(map(() => []));
     }

@@ -27,9 +27,11 @@ export class RecipeComponent {
     private router: Router,
     private toastService: ToastService
   ) {}
+
   onClick() {
     this.router.navigateByUrl('/edit-recipe/' + this.recipe.id);
   }
+
   public alertButtons = [
     {
       text: 'No',
@@ -43,6 +45,7 @@ export class RecipeComponent {
       },
     },
   ];
+
   onConfirmDelete() {
     this.recipeService.deleteRecipe(this.recipe.id).subscribe({
       next: () => {
@@ -63,5 +66,10 @@ export class RecipeComponent {
   get authorName(): string {
     const author = this.users.find((u) => u.id === this.recipe.author);
     return author ? author.username : 'Unknown';
+  }
+
+  public openDetails() {
+    //this.router.navigate(['/recipe-details', this.recipe.id]);
+     this.router.navigateByUrl('/recipe-details/' + this.recipe.id);
   }
 }

@@ -69,14 +69,11 @@
       </ion-textarea>
     </ion-item>
 
-    <ion-item>
-      <ion-label>Upload images</ion-label>
+    <!-- <ion-item>
+      <ion-label  (click)="fileInput.click()">Upload images</ion-label>
       <input type="file" (change)="onFileChange($event)" multiple accept="image/*" #fileInput hidden>
-      <ion-button class = "create-recipe-button" (click)="fileInput.click()">
-        <ion-icon name="image-outline"></ion-icon>
-        <ion-text>Select images</ion-text>
-      </ion-button>
-    </ion-item>
+
+    </ion-item> -->
 
     <div *ngIf="images.length > 0" class="image-preview-container">
       <div *ngFor="let image of images" class="image-preview">
@@ -84,6 +81,11 @@
         <ion-icon name="close-circle-outline" (click)="removeImage(image.file)"></ion-icon>
       </div>
     </div>
+
+      <ion-button expand="block" class = "create-recipe-button" (click)="fileInput.click()">
+        <input type="file" (change)="onFileChange($event)" multiple accept="image/*" #fileInput hidden>
+        <ion-text>Select images</ion-text>
+      </ion-button>
 
     <ion-button expand="block" class="create-recipe-button"
       expand="block" 
