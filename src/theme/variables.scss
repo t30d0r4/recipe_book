@@ -111,3 +111,7 @@ ion-range::part(bar-active) {
   border-radius: 50%;
   font-size: 20px;
 }
+
+.ingredients-list {
+  white-space: pre-line; // ✅ Ovo čini da \n bude novi red
+}

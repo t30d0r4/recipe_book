@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { Recipe } from 'src/app/models/recipe.model';
-import { User } from 'src/app/models/user.model';
 import { RecipesService } from 'src/app/services/recipe.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserSummary } from 'src/app/services/user.service';
@@ -27,10 +26,6 @@ export class RecipeComponent {
     private router: Router,
     private toastService: ToastService
   ) {}
-
-  onClick() {
-    this.router.navigateByUrl('/edit-recipe/' + this.recipe.id);
-  }
 
   public alertButtons = [
     {
@@ -69,7 +64,6 @@ export class RecipeComponent {
   }
 
   public openDetails() {
-    //this.router.navigate(['/recipe-details', this.recipe.id]);
      this.router.navigateByUrl('/recipe-details/' + this.recipe.id);
   }
 }

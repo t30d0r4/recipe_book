@@ -1,13 +1,46 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>recipe-details</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>FULL RECIPE</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">recipe-details</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+
+  <form #recipeForm="ngForm">
+    <!-- <ion-item>
+      <ion-label position="floating">Title</ion-label>
+      <ion-input name="title" [(ngModel)]="recipe.title" required></ion-input>
+    </ion-item> -->
+    <h1>{{recipe.title}}</h1>
+
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>Total Time: {{ recipe.totalTime }} min</ion-col>
+          <ion-col>Difficulty: {{ recipe.difficulty }}</ion-col>
+          <ion-col>Servings: {{ recipe.servings }}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+    <!-- <ion-item>
+      <ion-label position="floating">Image URL</ion-label>
+      <ion-input name="image" [(ngModel)]="recipe.image"></ion-input>
+    </ion-item> -->
+    
+    <ion-item>
+      <ion-label>
+        <h3>Ingredients</h3>
+        <p class="ingredients-list">{{ recipe.ingredients.join('\n') }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <h3>Recipe</h3>
+        <p>{{ recipe.description}}</p>
+    </ion-item>
+  </form>
 </ion-content>
