@@ -35,4 +35,14 @@ export class RecipeDetailsPage implements OnInit {
     this.router.navigateByUrl('/edit-recipe/' + this.recipe.id);
   }
 
+  slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    zoom: true,
+  };
+
+  openPhoto(photo: string) {
+    console.log('Photo clicked:', photo);
+    // Optionally open full-screen modal
+  }
 }

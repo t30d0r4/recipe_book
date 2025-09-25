@@ -1,5 +1,5 @@
 ion-content {
-  --background: #f0f0f0; /* Svetlo siva pozadina za ceo ekran */
+  --background: #f0f0f0;
 }
 
 ion-item {
@@ -12,7 +12,7 @@ ion-item {
 
 ion-card {
   --background: #ffffff;
-  --border-radius: 0px !important;
+  border-radius: 0px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
 }
@@ -113,5 +113,5 @@ ion-range::part(bar-active) {
 }
 
 .ingredients-list {
-  white-space: pre-line; // ✅ Ovo čini da \n bude novi red
+  white-space: pre-line;
 }

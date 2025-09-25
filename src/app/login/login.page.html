@@ -1,48 +1,7 @@
 <ion-header [translucent]="true">
 </ion-header>
  
-<ion-content [fullscreen]="true">
-  <!-- <div class="center-content">
-    <ion-card>
-    <ion-card-header>
-      <ion-card-title style="text-align: center;" >Login</ion-card-title>
-    </ion-card-header>
- 
-    <ion-card-content>
-      <ion-list>
- 
-        <ion-item>
-          <ion-input
-            type="username"
-            label="Username"
-            labelPlacement="stacked" >
-          </ion-input>
-        </ion-item>
-       
-        <ion-item>
-          <ion-input
-            type="password"
-            label="Password"
-            labelPlacement="stacked">
-            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-          </ion-input>
-        </ion-item>
- 
-      </ion-list>
-      <br/>
-      <div class="center-content">
-        <ion-buttons>
-          <ion-button routerLink="/all-recipes">
-            Log in
-          </ion-button>
-        </ion-buttons>
-      </div>
-      <br/>
-      <p style="text-align: center;">Don't have an account?</p>
-      <p routerLink="/register" style="text-align: center;">Sign up</p>
-    </ion-card-content>
-  </ion-card>
-  </div> -->
+<ion-content [fullscreen]="true" class = "center-content">
   <app-form
         [fields]="fields"
         [submitLabel]="'Login'"
