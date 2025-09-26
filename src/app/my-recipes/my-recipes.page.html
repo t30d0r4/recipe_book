@@ -5,15 +5,22 @@
     </ion-buttons>
     <ion-title>My recipes</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [formControl]="searchControl"
+      placeholder="Search recipes"
+      showCancelButton="focus"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngIf="!isLoading">
+  <ion-list *ngIf="filteredItems$ | async as items">
     <app-recipe
-      *ngFor="let recipe of recipes"
+      *ngFor="let recipe of items"
       [recipe]="recipe"
       [myRecipes]="true"
       [users]="users"
