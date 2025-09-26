@@ -4,6 +4,8 @@ import { RecipesService } from '../services/recipe.service';
 import { RefresherCustomEvent } from '@ionic/angular';
 import { UserService, UserSummary } from '../services/user.service';
 import { AuthService } from '../services/auth.services';
+import { FormControl } from '@angular/forms';
+import { BehaviorSubject, combineLatest, debounceTime, map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-my-recipes',
@@ -15,6 +17,9 @@ export class MyRecipesPage implements OnInit {
   recipes: Recipe[] = [];
   users: UserSummary[] = [];
   isLoading = false;
+  searchControl = new FormControl(''); 
+  private recipeSubject = new BehaviorSubject<Recipe[]>([]);
+  public filteredItems$!: Observable<Recipe[]>; 
 
   constructor(
     private recipesService: RecipesService,
@@ -24,6 +29,24 @@ export class MyRecipesPage implements OnInit {
   ngOnInit() {
     this.loadRecipes();
     this.loadUsers();
+    const search$: Observable<string> = this.searchControl.valueChanges.pipe(debounceTime(150), 
+          startWith(''),
+          map(term => (term as string).toLowerCase()) 
+      );
+    
+      this.filteredItems$ = combineLatest([
+          this.recipeSubject.asObservable(),
+          search$,
+        ]).pipe(
+          map(([recipes, searchTerm]) => {
+            if (!searchTerm || searchTerm.trim() === '') {
+              return recipes;
+            }
+            return recipes.filter(recipe => 
+              recipe.title.toLowerCase().includes(searchTerm) 
+            );
+          })
+    );
   }
 
   loadRecipes() {
@@ -31,6 +54,7 @@ export class MyRecipesPage implements OnInit {
     this.recipesService.getMyRecipes().subscribe({
       next: (summaries) => {
         this.recipes = summaries;
+        this.recipeSubject.next(summaries);
         this.isLoading = false;
       },
       error: (err) => {

@@ -5,12 +5,19 @@
     </ion-buttons>
     <ion-title>Discover recipes</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [formControl]="searchControl"
+      placeholder="Search recipes"
+      showCancelButton="focus"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="!isLoading">
+  <ion-list *ngIf="filteredItems$ | async as items">
     <app-recipe
-      *ngFor="let recipe of recipes"
+      *ngFor="let recipe of items"
       [recipe]="recipe"
       (deleted)="refreshRecipes()"
       [users]="users"
