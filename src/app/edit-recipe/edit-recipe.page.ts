@@ -24,9 +24,8 @@ export class EditRecipePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Dohvati recept iz resolver-a
     this.recipe = this.route.snapshot.data['recipe'];
-    this.ingredientsString = this.recipe.ingredients.join(', ');
+    this.ingredientsString = this.recipe.ingredients.join('\n');
   }
 
   saveRecipe() {

@@ -1,22 +1,4 @@
-.center-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-.form-container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 16px;
-  height: auto;
-  min-height: 100%;
-}
 
-ion-content {
-  --padding-top: env(safe-area-inset-top);
-  --padding-bottom: env(safe-area-inset-bottom);
-}
 
 
 

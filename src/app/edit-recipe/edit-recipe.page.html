@@ -15,20 +15,23 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Description</ion-label>
-      <ion-textarea
-        name="description"
-        [(ngModel)]="recipe.description"
-      ></ion-textarea>
-    </ion-item>
-
-    <ion-item>
       <ion-label position="floating">Difficulty</ion-label>
       <ion-input
         type="number"
         name="difficulty"
         [(ngModel)]="recipe.difficulty"
       ></ion-input>
+      <!-- <ion-range
+        [min]="1"
+        [max]="5"
+        [step]="1"
+        [snaps]="true"
+        [pin]="true"
+        color="primary"
+        [value]="selectedDifficulty"
+        (ionInput)="onDifficultyChange($event)"
+        formControlName="difficulty">
+      </ion-range> -->
     </ion-item>
 
     <ion-item>
@@ -50,8 +53,17 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Ingredients (comma separated)</ion-label>
-      <ion-input name="ingredients" [(ngModel)]="ingredientsString"></ion-input>
+      <ion-label position="floating">Ingredients</ion-label>
+      <ion-textarea name="ingredients" [autoGrow] = true [(ngModel)]="ingredientsString"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-textarea
+        name="description"
+        [autoGrow]="true"
+        [(ngModel)]="recipe.description"
+      ></ion-textarea>
     </ion-item>
 
     <ion-button expand="full" type="submit">Save</ion-button>

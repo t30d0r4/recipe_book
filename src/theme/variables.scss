@@ -115,3 +115,30 @@ ion-range::part(bar-active) {
 .ingredients-list {
   white-space: pre-line;
 }
+
+.recipe-author {
+  font-size: 14px;
+  color: #888888;
+  margin: 0 0 10px 0;
+}
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.form-container {
+  background: url('../assets/images/a.png') no-repeat center center fixed !important;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 16px;
+  height: auto;
+  min-height: 100%;
+}
+
+ion-content {
+  --padding-top: env(safe-area-inset-top);
+  --padding-bottom: env(safe-area-inset-bottom);
+}
